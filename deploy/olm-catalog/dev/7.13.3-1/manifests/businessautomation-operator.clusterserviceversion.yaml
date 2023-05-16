@@ -415,7 +415,7 @@ spec:
   maturity: dev
   provider:
     name: Red Hat
-  replaces: businessautomation-operator.7.13.2-3
+  # replaces: businessautomation-operator.7.13.2-3
   selector:
     matchLabels:
       alm-owner-businessautomation: businessautomation-operator

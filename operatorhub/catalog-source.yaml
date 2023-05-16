@@ -1,0 +1,10 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: my-operator-manifests
+  namespace: openshift-marketplace
+spec:
+  sourceType: grpc
+  image: quay.io/abhishek_kumar141/rhpam-operator-bundle:7.13.3
+  displayName: My Operator Catalog
+  publisher: grpc

@@ -5,6 +5,6 @@ metadata:
   namespace: openshift-marketplace
 spec:
   sourceType: grpc
-  image: quay.io/abhishek_kumar141/rhpam-operator-bundle:7.13.3
+  image: quay.io/abhishek_kumar141/rhpam-operator-index:7.13.3
   displayName: My Operator Catalog
   publisher: grpc

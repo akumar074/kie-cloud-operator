@@ -18,10 +18,10 @@ func ConfigureHostname(object *api.CustomObject, cr *api.KieApp, hostname string
 	if cr.Spec.Auth == nil || cr.Spec.Auth.SSO == nil {
 		return
 	}
-	for dcIdx := range object.DeploymentConfigs {
-		dc := &object.DeploymentConfigs[dcIdx]
-		for containerIdx := range dc.Spec.Template.Spec.Containers {
-			container := &dc.Spec.Template.Spec.Containers[containerIdx]
+	for di := range object.Deployments {
+		dep := &object.Deployments[di]
+		for ci := range dep.Spec.Template.Spec.Containers {
+			container := &dep.Spec.Template.Spec.Containers[ci]
 			if pos := shared.GetEnvVar(ssoClientVar, container.Env); pos == -1 {
 				continue
 			}

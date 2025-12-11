@@ -13,7 +13,7 @@ dashbuilder:
           requests:
             storage: 1Gi
   #[[end]]
-  deploymentConfigs:
+  deployments:
     - metadata:
         name: "[[.ApplicationName]]-[[.Dashbuilder.Name]]"
         labels:
@@ -21,24 +21,12 @@ dashbuilder:
           application: "[[.ApplicationName]]"
           service: "[[.ApplicationName]]-[[.Dashbuilder.Name]]"
       spec:
-        strategy:
-          type: Recreate
-        triggers:
-          #[[if not .Dashbuilder.OmitImageStream]]
-          - type: ImageChange
-            imageChangeParams:
-              automatic: true
-              containerNames:
-                - "[[.ApplicationName]]-[[.Dashbuilder.Name]]"
-              from:
-                kind: ImageStreamTag
-                namespace: "openshift"
-                name: "[[.Dashbuilder.Image]]:[[.Dashbuilder.ImageTag]]"
-          #[[end]]
-          - type: ConfigChange
         replicas: [[.Dashbuilder.Replicas]]
         selector:
-          deploymentConfig: "[[.ApplicationName]]-[[.Dashbuilder.Name]]"
+          matchLabels:
+            deploymentConfig: "[[.ApplicationName]]-[[.Dashbuilder.Name]]"
+        strategy:
+          type: Recreate
         template:
           metadata:
             name: "[[.ApplicationName]]-[[.Dashbuilder.Name]]"

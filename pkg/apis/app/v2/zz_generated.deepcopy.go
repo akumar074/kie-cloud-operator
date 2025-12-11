@@ -6,7 +6,6 @@
 package v2
 
 import (
-	appsv1 "github.com/openshift/api/apps/v1"
 	buildv1 "github.com/openshift/api/build/v1"
 	imagev1 "github.com/openshift/api/image/v1"
 	routev1 "github.com/openshift/api/route/v1"
@@ -291,9 +290,9 @@ func (in *CustomObject) DeepCopyInto(out *CustomObject) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
-	if in.DeploymentConfigs != nil {
-		in, out := &in.DeploymentConfigs, &out.DeploymentConfigs
-		*out = make([]appsv1.DeploymentConfig, len(*in))
+	if in.Deployments != nil {
+		in, out := &in.Deployments, &out.Deployments
+		*out = make([]apiappsv1.Deployment, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}

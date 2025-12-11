@@ -1,7 +1,6 @@
 package v2
 
 import (
-	oappsv1 "github.com/openshift/api/apps/v1"
 	buildv1 "github.com/openshift/api/build/v1"
 	oimagev1 "github.com/openshift/api/image/v1"
 	routev1 "github.com/openshift/api/route/v1"
@@ -129,7 +128,7 @@ type KieAppUpgrades struct {
 type KieServerSet struct {
 	// +kubebuilder:validation:Format:=int
 	// Number of Server sets that will be deployed
-	Deployments *int `json:"deployments,omitempty"` // Number of KieServer DeploymentConfigs (defaults to 1)
+	Deployments *int `json:"deployments,omitempty"` // Number of KieServer Deployments (defaults to 1)
 	// Server name
 	Name string `json:"name,omitempty"`
 	// Server ID
@@ -717,7 +716,7 @@ type CustomObject struct {
 	Secrets                []corev1.Secret                `json:"secrets,omitempty"`
 	Roles                  []rbacv1.Role                  `json:"roles,omitempty"`
 	RoleBindings           []rbacv1.RoleBinding           `json:"roleBindings,omitempty"`
-	DeploymentConfigs      []oappsv1.DeploymentConfig     `json:"deploymentConfigs,omitempty"`
+	Deployments            []appsv1.Deployment            `json:"deployments,omitempty"`
 	StatefulSets           []appsv1.StatefulSet           `json:"statefulSets,omitempty"`
 	BuildConfigs           []buildv1.BuildConfig          `json:"buildConfigs,omitempty"`
 	ImageStreams           []oimagev1.ImageStream         `json:"imageStreams,omitempty"`

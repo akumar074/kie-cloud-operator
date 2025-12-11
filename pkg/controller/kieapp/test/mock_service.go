@@ -5,7 +5,6 @@ import (
 
 	"github.com/RHsyseng/operator-utils/pkg/logs"
 	api "github.com/kiegroup/kie-cloud-operator/pkg/apis/app/v2"
-	oappsv1 "github.com/openshift/api/apps/v1"
 	buildv1 "github.com/openshift/api/build/v1"
 	consolev1 "github.com/openshift/api/console/v1"
 	oimagev1 "github.com/openshift/api/image/v1"
@@ -54,11 +53,9 @@ var knownTypes = map[schema.GroupVersion][]runtime.Object{
 		&corev1.ConfigMap{},
 		&corev1.ConfigMapList{},
 	},
-	oappsv1.GroupVersion: {
-		&oappsv1.DeploymentConfig{},
-		&oappsv1.DeploymentConfigList{},
-	},
 	appsv1.SchemeGroupVersion: {
+		&appsv1.Deployment{},
+		&appsv1.DeploymentList{},
 		&appsv1.StatefulSet{},
 		&appsv1.StatefulSetList{},
 	},

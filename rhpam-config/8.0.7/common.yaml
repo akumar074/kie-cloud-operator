@@ -1,5 +1,5 @@
 console:
-  deploymentConfigs:
+  deployments:
     - metadata:
         name: "[[.ApplicationName]]-[[.Console.Name]]"
         labels:
@@ -7,24 +7,12 @@ console:
           application: "[[.ApplicationName]]"
           service: "[[.ApplicationName]]-[[.Console.Name]]"
       spec:
-        strategy:
-          type: Recreate
-        triggers:
-          #[[if not .Console.OmitImageStream]]
-          - type: ImageChange
-            imageChangeParams:
-              automatic: true
-              containerNames:
-                - "[[.ApplicationName]]-[[.Console.Name]]"
-              from:
-                kind: ImageStreamTag
-                namespace: "openshift"
-                name: "[[.Console.Image]]:[[.Console.ImageTag]]"
-          #[[end]]
-          - type: ConfigChange
         replicas: [[.Console.Replicas]]
         selector:
-          deploymentConfig: "[[.ApplicationName]]-[[.Console.Name]]"
+          matchLabels:
+            deploymentConfig: "[[.ApplicationName]]-[[.Console.Name]]"
+        strategy:
+          type: Recreate
         template:
           metadata:
             name: "[[.ApplicationName]]-[[.Console.Name]]"
@@ -518,7 +506,7 @@ smartRouter:
         resources:
           requests:
             storage: "64Mi"
-  deploymentConfigs:
+  deployments:
     - metadata:
         name: "[[.ApplicationName]]-smartrouter"
         labels:
@@ -526,27 +514,15 @@ smartRouter:
           application: "[[.ApplicationName]]"
           service: "[[.ApplicationName]]-smartrouter"
       spec:
-        strategy:
-          rollingParams:
-            maxSurge: 100%
-            maxUnavailable: 0
-          type: Rolling
-        triggers:
-          #[[if not .SmartRouter.OmitImageStream]]
-          - type: ImageChange
-            imageChangeParams:
-              automatic: true
-              containerNames:
-                - "[[.ApplicationName]]-smartrouter"
-              from:
-                kind: ImageStreamTag
-                namespace: "openshift"
-                name: "[[.SmartRouter.Image]]:[[.SmartRouter.ImageTag]]"
-          #[[end]]
-          - type: ConfigChange
         replicas: [[.SmartRouter.Replicas]]
         selector:
-          deploymentConfig: "[[.ApplicationName]]-smartrouter"
+          matchLabels:
+            deploymentConfig: "[[.ApplicationName]]-smartrouter"
+        strategy:
+          type: RollingUpdate
+          rollingUpdate:
+            maxSurge: 100%
+            maxUnavailable: 0
         template:
           metadata:
             name: "[[.ApplicationName]]-smartrouter"
@@ -770,7 +746,7 @@ servers:
   ## RANGE BEGINS
   #[[ range $index, $Map := .Servers ]]
   ## KIE server deployment config BEGIN
-  - deploymentConfigs:
+  - deployments:
       - metadata:
           name: "[[.KieName]]"
           labels:
@@ -780,27 +756,15 @@ servers:
             services.server.kie.org/kie-server-id: "[[.KieServerID]]"
         spec:
           revisionHistoryLimit: 10
-          strategy:
-            rollingParams:
-              maxSurge: 100%
-              maxUnavailable: 0
-            type: Rolling
-          triggers:
-            #[[if not .OmitImageStream]]
-            - type: ImageChange
-              imageChangeParams:
-                automatic: true
-                containerNames:
-                  - "[[.KieName]]"
-                from:
-                  kind: "[[.From.Kind]]"
-                  namespace: "[[.From.Namespace]]"
-                  name: "[[.From.Name]]"
-            #[[end]]
-            - type: ConfigChange
           replicas: [[.Replicas]]
           selector:
-            deploymentConfig: "[[.KieName]]"
+            matchLabels:
+              deploymentConfig: "[[.KieName]]"
+          strategy:
+            type: RollingUpdate
+            rollingUpdate:
+              maxSurge: 100%
+              maxUnavailable: 0
           template:
             metadata:
               name: "[[.KieName]]"

@@ -2,7 +2,7 @@
 databases:
   ## RANGE BEGINS
   #[[ range $index, $Map := .Databases ]]
-  - deploymentConfigs:
+  - deployments:
       ## PostgreSQL deployment config BEGIN
       - metadata:
           name: "[[.ServerName]]-postgresql"
@@ -13,11 +13,10 @@ databases:
         spec:
           strategy:
             type: Recreate
-          triggers:
-            - type: ConfigChange
           replicas: 1
           selector:
-            deploymentConfig: "[[.ServerName]]-postgresql"
+            matchLabels:
+              deploymentConfig: "[[.ServerName]]-postgresql"
           template:
             metadata:
               name: "[[.ServerName]]-postgresql"

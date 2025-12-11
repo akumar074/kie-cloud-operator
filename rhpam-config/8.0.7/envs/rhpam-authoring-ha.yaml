@@ -15,7 +15,7 @@ console:
           requests:
             storage: [[.Console.PvSize]]
 
-  deploymentConfigs:
+  deployments:
     - metadata:
         name: "[[.ApplicationName]]-[[.Console.Name]]"
       spec:

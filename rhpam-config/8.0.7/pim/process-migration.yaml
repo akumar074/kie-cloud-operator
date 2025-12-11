@@ -1,6 +1,6 @@
 ## KIE ProcessMigration BEGIN
 processMigration:
-  deploymentConfigs:
+  deployments:
     - metadata:
         name: "[[.ApplicationName]]-process-migration"
         labels:
@@ -10,22 +10,10 @@ processMigration:
       spec:
         replicas: [[.ProcessMigration.Replicas]]
         selector:
-          deploymentConfig: "[[.ApplicationName]]-process-migration"
+          matchLabels:
+            deploymentConfig: "[[.ApplicationName]]-process-migration"
         strategy:
           type: Recreate
-        triggers:
-          #[[if not .ProcessMigration.OmitImageStream]]
-          - type: ImageChange
-            imageChangeParams:
-              automatic: true
-              containerNames:
-                - "[[.ApplicationName]]-process-migration"
-              from:
-                kind: ImageStreamTag
-                namespace: openshift
-                name: "[[.ProcessMigration.Image]]:[[.ProcessMigration.ImageTag]]"
-          #[[end]]
-          - type: ConfigChange
         template:
           metadata:
             name: "[[.ApplicationName]]-process-migration"

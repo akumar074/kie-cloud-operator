@@ -6,13 +6,8 @@ metadata:
     capabilities: Seamless Upgrades
     categories: Integration & Delivery
     certified: "false"
-<<<<<<< Updated upstream
-    containerImage: quay.io/kiegroup/kie-cloud-operator:8.0.9
-    createdAt: "2026-02-09 12:21:04"
-=======
     containerImage: quay.io/abkuma/kie-cloud-operator:8.0.9
     createdAt: "2026-02-16 13:53:46"
->>>>>>> Stashed changes
     description: Deploys and manages IBM Business Automation Manager Open Editions
       environment.
     features.operators.openshift.io/disconnected: "false"
@@ -32,7 +27,7 @@ metadata:
     operator-bamoe-businessautomation: "true"
     operatorframework.io/arch.amd64: supported
     operatorframework.io/os.linux: supported
-  name: bamoe-businessautomation-operator.8.0.9-1-dev-vd2mj6qmdt
+  name: bamoe-businessautomation-operator.8.0.9-1-dev-xlkr8cfrpj
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -43,9 +38,9 @@ spec:
       kind: KieApp
       name: kieapps.app.kiegroup.org
       resources:
-      - kind: Deployment
+      - kind: DeploymentConfig
         name: ""
-        version: apps/v1
+        version: apps.openshift.io/v1
       - kind: StatefulSet
         name: ""
         version: apps/v1
@@ -203,23 +198,23 @@ spec:
                 - name: RELATED_IMAGE_POSTGRESQL_PROXY_IMAGE_8.0.9
                   value: registry.redhat.io/rhscl/postgresql-13-rhel7:latest
                 - name: RELATED_IMAGE_DATAGRID_IMAGE_8.0.9
-                  value: registry.redhat.io/datagrid/datagrid-8-rhel9:1.1
+                  value: registry.redhat.io/datagrid/datagrid-8-rhel9:1.5
                 - name: RELATED_IMAGE_BROKER_IMAGE_8.0.9
-                  value: registry.redhat.io/amq7/amq-broker-rhel9:7.9
+                  value: registry.redhat.io/amq7/amq-broker-rhel9:7.13
                 - name: RELATED_IMAGE_PAM_KIESERVER_IMAGE_8.0.8
-                  value: registry.redhat.io/ibm-bamoe/bamoe-kieserver-rhel9:8.0.8
+                  value: registry.redhat.io/ibm-bamoe/bamoe-kieserver-rhel8:8.0.8
                 - name: RELATED_IMAGE_PAM_CONTROLLER_IMAGE_8.0.8
-                  value: registry.redhat.io/ibm-bamoe/bamoe-controller-rhel9:8.0.8
+                  value: registry.redhat.io/ibm-bamoe/bamoe-controller-rhel8:8.0.8
                 - name: RELATED_IMAGE_PAM_BC_IMAGE_8.0.8
-                  value: registry.redhat.io/ibm-bamoe/bamoe-businesscentral-rhel9:8.0.8
+                  value: registry.redhat.io/ibm-bamoe/bamoe-businesscentral-rhel8:8.0.8
                 - name: RELATED_IMAGE_PAM_BC_MONITORING_IMAGE_8.0.8
-                  value: registry.redhat.io/ibm-bamoe/bamoe-businesscentral-monitoring-rhel9:8.0.8
+                  value: registry.redhat.io/ibm-bamoe/bamoe-businesscentral-monitoring-rhel8:8.0.8
                 - name: RELATED_IMAGE_PAM_SMARTROUTER_IMAGE_8.0.8
-                  value: registry.redhat.io/ibm-bamoe/bamoe-smartrouter-rhel9:8.0.8
+                  value: registry.redhat.io/ibm-bamoe/bamoe-smartrouter-rhel8:8.0.8
                 - name: RELATED_IMAGE_PAM_PROCESS_MIGRATION_IMAGE_8.0.8
-                  value: registry.redhat.io/ibm-bamoe/bamoe-process-migration-rhel9:8.0.8
+                  value: registry.redhat.io/ibm-bamoe/bamoe-process-migration-rhel8:8.0.8
                 - name: RELATED_IMAGE_PAM_DASHBUILDER_IMAGE_8.0.8
-                  value: registry.redhat.io/ibm-bamoe/bamoe-dashbuilder-rhel9:8.0.8
+                  value: registry.redhat.io/ibm-bamoe/bamoe-dashbuilder-rhel8:8.0.8
                 - name: RELATED_IMAGE_OSE_CLI_IMAGE_8.0.8
                   value: registry.redhat.io/openshift4/ose-cli:v4.15
                 - name: RELATED_IMAGE_MYSQL_PROXY_IMAGE_8.0.8
@@ -413,7 +408,7 @@ spec:
   - operator
   labels:
     alm-owner-bamoe-businessautomation: bamoe-businessautomation-operator
-    operated-by: bamoe-businessautomation-operator.8.0.9-1-dev-vd2mj6qmdt
+    operated-by: bamoe-businessautomation-operator.8.0.9-1-dev-xlkr8cfrpj
   links:
   - name: Product Page
     url: https://ibm.com
@@ -429,5 +424,5 @@ spec:
   selector:
     matchLabels:
       alm-owner-bamoe-businessautomation: bamoe-businessautomation-operator
-      operated-by: bamoe-businessautomation-operator.8.0.9-1-dev-vd2mj6qmdt
-  version: 8.0.9-1+vd2mj6qmdt
+      operated-by: bamoe-businessautomation-operator.8.0.9-1-dev-xlkr8cfrpj
+  version: 8.0.9-1+xlkr8cfrpj

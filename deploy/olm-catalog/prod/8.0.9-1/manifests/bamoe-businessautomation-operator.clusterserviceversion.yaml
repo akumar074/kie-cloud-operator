@@ -7,7 +7,7 @@ metadata:
     categories: Integration & Delivery
     certified: "true"
     containerImage: registry.stage.redhat.io/ibm-bamoe/bamoe-rhel9-operator:8.0.9
-    createdAt: "2026-02-09 12:21:04"
+    createdAt: "2026-04-10 01:29:06"
     description: Deploys and manages IBM Business Automation Manager Open Editions
       environment.
     features.operators.openshift.io/disconnected: "false"
@@ -227,6 +227,8 @@ spec:
                   value: registry.redhat.io/amq7/amq-broker:7.8
                 - name: RELATED_IMAGE_OAUTH_PROXY_IMAGE_LATEST
                   value: registry.redhat.io/openshift4/ose-oauth-proxy:latest
+                - name: RELATED_IMAGE_OAUTH_PROXY_IMAGE_4.15
+                  value: registry.redhat.io/openshift4/ose-oauth-proxy:v4.15
                 - name: RELATED_IMAGE_OAUTH_PROXY_IMAGE_4.14
                   value: registry.redhat.io/openshift4/ose-oauth-proxy:v4.14
                 - name: RELATED_IMAGE_OAUTH_PROXY_IMAGE_4.13

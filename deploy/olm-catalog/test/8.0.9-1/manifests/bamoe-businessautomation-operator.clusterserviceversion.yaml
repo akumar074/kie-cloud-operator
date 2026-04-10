@@ -7,7 +7,7 @@ metadata:
     categories: Integration & Delivery
     certified: "true"
     containerImage: registry-proxy.engineering.redhat.com/rh-osbs/bamoe-8-rhpam-rhel9-operator:8.0.9
-    createdAt: "2026-02-09 12:21:04"
+    createdAt: "2026-04-10 01:29:06"
     description: Deploys and manages IBM Business Automation Manager Open Editions
       environment.
     features.operators.openshift.io/disconnected: "false"
@@ -27,7 +27,7 @@ metadata:
     operator-bamoe-businessautomation: "true"
     operatorframework.io/arch.amd64: supported
     operatorframework.io/os.linux: supported
-  name: bamoe-businessautomation-operator.8.0.9-1-dev-bfqldlkfdq
+  name: bamoe-businessautomation-operator.8.0.9-1-dev-lxjddcnvcc
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -227,6 +227,8 @@ spec:
                   value: registry.redhat.io/amq7/amq-broker:7.8
                 - name: RELATED_IMAGE_OAUTH_PROXY_IMAGE_LATEST
                   value: registry.redhat.io/openshift4/ose-oauth-proxy:latest
+                - name: RELATED_IMAGE_OAUTH_PROXY_IMAGE_4.15
+                  value: registry.redhat.io/openshift4/ose-oauth-proxy:v4.15
                 - name: RELATED_IMAGE_OAUTH_PROXY_IMAGE_4.14
                   value: registry.redhat.io/openshift4/ose-oauth-proxy:v4.14
                 - name: RELATED_IMAGE_OAUTH_PROXY_IMAGE_4.13
@@ -408,7 +410,7 @@ spec:
   - operator
   labels:
     alm-owner-bamoe-businessautomation: bamoe-businessautomation-operator
-    operated-by: bamoe-businessautomation-operator.8.0.9-1-dev-bfqldlkfdq
+    operated-by: bamoe-businessautomation-operator.8.0.9-1-dev-lxjddcnvcc
   links:
   - name: Product Page
     url: https://ibm.com
@@ -424,5 +426,5 @@ spec:
   selector:
     matchLabels:
       alm-owner-bamoe-businessautomation: bamoe-businessautomation-operator
-      operated-by: bamoe-businessautomation-operator.8.0.9-1-dev-bfqldlkfdq
-  version: 8.0.9-1+bfqldlkfdq
+      operated-by: bamoe-businessautomation-operator.8.0.9-1-dev-lxjddcnvcc
+  version: 8.0.9-1+lxjddcnvcc

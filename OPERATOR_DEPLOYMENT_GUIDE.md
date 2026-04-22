@@ -127,7 +127,7 @@ metadata:
   namespace: openshift-marketplace
 spec:
   sourceType: grpc
-  image: quay.io/${USERNAME}/rhpam-operator-index:8.0.9
+  image: quay.io/abkuma/rhpam-operator-index:8.0.9
   displayName: My Operator Catalog
   publisher: grpc
 EOF
@@ -436,7 +436,7 @@ oc get secret/pull-secret -n openshift-config \
 # Add artifactory credentials
 oc registry login \
   --registry="na.artifactory.swg-devops.com" \
-  --auth-basic="<username>:<password>" \
+  --auth-basic="user:password" \
   --to=/tmp/global-pull-secret.json
 
 # Update global pull secret

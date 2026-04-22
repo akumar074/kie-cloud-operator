@@ -182,7 +182,7 @@ spec:
                 - name: RELATED_IMAGE_PAM_CONTROLLER_IMAGE_8.0.9
                   value: na.artifactory.swg-devops.com/hyc-bamoe-team-docker-local/ibm-bamoe-bamoe-controller-rhel9:8.0.9-3
                 - name: RELATED_IMAGE_PAM_BC_IMAGE_8.0.9
-                  value: quay.io/r_anand/bamoe-businesscentral-rhel9:8.0.9
+                  value: quay.io/abkuma/bamoe-businesscentral-rhel9:8.0.9
                 - name: RELATED_IMAGE_PAM_BC_MONITORING_IMAGE_8.0.9
                   value: na.artifactory.swg-devops.com/hyc-bamoe-team-docker-local/ibm-bamoe-bamoe-businesscentral-monitoring-rhel9:8.0.9-3
                 - name: RELATED_IMAGE_PAM_SMARTROUTER_IMAGE_8.0.9

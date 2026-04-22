@@ -7,8 +7,6 @@ console:
           spec:
             containers:
               - name: "[[.ApplicationName]]-[[.Console.Name]]"
-                env:
-                  - name: KIE_SERVER_HOST
                 resources:
                   limits:
                     memory: 2Gi

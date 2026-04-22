@@ -53,14 +53,52 @@ if [[ -z ${CI} || -n ${CEKIT_OSBS_BUILD} ]]; then
         fi
     else
         echo
-        echo Will build console first:
+        echo Will build console and operator for multiple architectures:
         echo
-        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -mod=vendor -a -o build/_output/bin/console-cr-form ./cmd/ui
+        
+        # Build for AMD64
+        echo "Building for linux/amd64..."
+        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -mod=vendor -a -o build/_output/bin/console-cr-form-amd64 ./cmd/ui
+        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -mod=vendor -a -o build/_output/bin/kie-cloud-operator-amd64 ./cmd/manager
+        
+        # Build for ARM64
+        echo "Building for linux/arm64..."
+        CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -v -mod=vendor -a -o build/_output/bin/console-cr-form-arm64 ./cmd/ui
+        CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -v -mod=vendor -a -o build/_output/bin/kie-cloud-operator-arm64 ./cmd/manager
+        
         echo
-
-        operator-sdk build --go-build-args -mod=vendor ${REGISTRY}/${IMAGE}:${PRODUCT_VERSION}
+        echo "Building multiplatform Docker image with buildx..."
+        
+        # Check if buildx is available
+        if ! docker buildx version &> /dev/null; then
+            echo "ERROR: Docker buildx is not available"
+            echo "Please install Docker buildx or use Docker Desktop which includes it"
+            exit 1
+        fi
+        
+        # Create or use existing buildx builder
+        BUILDER_NAME="multiarch-builder"
+        if ! docker buildx inspect ${BUILDER_NAME} &> /dev/null; then
+            echo "Creating new buildx builder: ${BUILDER_NAME}"
+            docker buildx create --name ${BUILDER_NAME} --use --bootstrap
+        else
+            echo "Using existing buildx builder: ${BUILDER_NAME}"
+            docker buildx use ${BUILDER_NAME}
+        fi
+        
+        # Build multiplatform image
+        docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            --tag ${REGISTRY}/${IMAGE}:${PRODUCT_VERSION} \
+            --load \
+            -f build/Dockerfile .
     fi
 else
-    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -mod=vendor -a -o build/_output/bin/console-cr-form ./cmd/ui
-    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -mod=vendor -a -o build/_output/bin/kie-cloud-operator ./cmd/manager
+    # Build for AMD64
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -mod=vendor -a -o build/_output/bin/console-cr-form-amd64 ./cmd/ui
+    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -mod=vendor -a -o build/_output/bin/kie-cloud-operator-amd64 ./cmd/manager
+    
+    # Build for ARM64
+    CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -v -mod=vendor -a -o build/_output/bin/console-cr-form-arm64 ./cmd/ui
+    CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -v -mod=vendor -a -o build/_output/bin/kie-cloud-operator-arm64 ./cmd/manager
 fi

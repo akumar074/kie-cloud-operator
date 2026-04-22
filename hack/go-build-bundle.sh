@@ -74,7 +74,7 @@ if [[ ${LOCAL} != true ]]; then
                 "operator_manifests":
                     {"enable_digest_pinning": true, "enable_repo_replacements": true, "enable_registry_replacements": true, "manifests_dir": '${VERDIR}/manifests'},
                 "platforms":
-                    {"only": ["x86_64"]}
+                    {"only": ["x86_64", "aarch64"]}
                 }
             },
         "repository":
@@ -83,14 +83,72 @@ if [[ ${LOCAL} != true ]]; then
     }' \
         ${CFLAGS}
 else
-    cekit -v --descriptor image-bundle.yaml --redhat build \
-        --overrides '{name: '${BUNDLE_NAME}'}' \
-        --overrides '{version: '${VERSION}'}' \
-        --overrides '{
-    artifacts: [
-        {name: '${CSV}', path: '${CSV_PATH}', md5: '${MD5_CSV}', dest: '/manifests/'},
-        {name: '${CRD}', path: '${CRD_PATH}', md5: '${MD5_CRD}', dest: '/manifests/'},
-        {name: '${ANNO}', path: '${ANNO_PATH}', md5: '${MD5_ANNO}', dest: '/metadata/'}
-    ]}' \
-        ${CFLAGS}
+    # Check if we should use buildx for multiplatform
+    if command -v docker &> /dev/null && docker buildx version &> /dev/null; then
+        echo "Building multiplatform bundle image with CEKit + Docker buildx..."
+        
+        # First, build with CEKit using podman (generates image locally)
+        echo "Step 1: Building with CEKit for current platform..."
+        cekit -v --descriptor image-bundle.yaml --redhat build \
+            --overrides '{name: '${BUNDLE_NAME}'}' \
+            --overrides '{version: '${VERSION}'}' \
+            --overrides '{
+        artifacts: [
+            {name: '${CSV}', path: '${CSV_PATH}', md5: '${MD5_CSV}', dest: '/manifests/'},
+            {name: '${CRD}', path: '${CRD_PATH}', md5: '${MD5_CRD}', dest: '/manifests/'},
+            {name: '${ANNO}', path: '${ANNO_PATH}', md5: '${MD5_ANNO}', dest: '/metadata/'}
+        ]}' \
+            ${CFLAGS}
+        
+        echo "Step 2: Converting to multiplatform with Docker buildx..."
+        
+        # Save the image to tar
+        TEMP_TAR="/tmp/bundle-image-${VERSION}.tar"
+        ${1} save ${BUNDLE_NAME}:${VERSION} -o ${TEMP_TAR}
+        
+        # Load into Docker
+        docker load -i ${TEMP_TAR}
+        rm -f ${TEMP_TAR}
+        
+        # Create or use existing buildx builder
+        BUILDER_NAME="multiarch-builder"
+        if ! docker buildx inspect ${BUILDER_NAME} &> /dev/null; then
+            echo "Creating new buildx builder: ${BUILDER_NAME}"
+            docker buildx create --name ${BUILDER_NAME} --use --bootstrap
+        else
+            echo "Using existing buildx builder: ${BUILDER_NAME}"
+            docker buildx use ${BUILDER_NAME}
+        fi
+        
+        # Create a simple Dockerfile that uses the built image as base
+        TEMP_DOCKERFILE="/tmp/Dockerfile.multiarch"
+        cat > ${TEMP_DOCKERFILE} << EOF
+FROM ${BUNDLE_NAME}:${VERSION}
+EOF
+        
+        # Build multiplatform image (this will use the existing layers)
+        docker buildx build \
+            --platform linux/amd64,linux/arm64 \
+            --tag ${BUNDLE_NAME}:${VERSION} \
+            --load \
+            -f ${TEMP_DOCKERFILE} \
+            .
+        
+        rm -f ${TEMP_DOCKERFILE}
+        
+        echo "Multiplatform bundle image created successfully"
+    else
+        # Fallback to regular build
+        echo "Docker buildx not available, building for current platform only..."
+        cekit -v --descriptor image-bundle.yaml --redhat build \
+            --overrides '{name: '${BUNDLE_NAME}'}' \
+            --overrides '{version: '${VERSION}'}' \
+            --overrides '{
+        artifacts: [
+            {name: '${CSV}', path: '${CSV_PATH}', md5: '${MD5_CSV}', dest: '/manifests/'},
+            {name: '${CRD}', path: '${CRD_PATH}', md5: '${MD5_CRD}', dest: '/manifests/'},
+            {name: '${ANNO}', path: '${ANNO_PATH}', md5: '${MD5_ANNO}', dest: '/metadata/'}
+        ]}' \
+            ${CFLAGS}
+    fi
 fi

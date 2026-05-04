@@ -7,7 +7,6 @@ roleRef:
   kind: ClusterRole
   name: bamoe-business-automation-operator
 subjects:
-- apiGroup: rbac.authorization.k8s.io
-  kind: ServiceAccount
+- kind: ServiceAccount
   name: bamoe-business-automation-operator
   namespace: placeholder
